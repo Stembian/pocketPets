@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+
 public class Battle : MonoBehaviour
 {
     [SerializeField] private Character _player;
@@ -44,13 +46,14 @@ public class Battle : MonoBehaviour
 
     public void StartTurn()
     {
-
         if (isPlayerTurn == false)
         {
             GriferMove();
-
         }
-       
+        else
+        {
+            _playerControls.SetActive(true);
+        }
     }
 
     public int DiceRoll(int sides)
@@ -68,16 +71,19 @@ public class Battle : MonoBehaviour
         else
         {
             StartCoroutine(EndTurnWait());
-            _playerControls.SetActive(true);
         }
     }
 
     
     public IEnumerator EndTurnWait()
     {
-        
-        yield return new WaitForSeconds(3);
         isPlayerTurn = !isPlayerTurn;
+        yield return new WaitForSeconds(3);
         StartTurn();
+    }
+
+    public void ReloadScene()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }
